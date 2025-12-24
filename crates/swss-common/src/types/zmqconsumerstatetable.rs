@@ -49,7 +49,10 @@ impl ZmqConsumerStateTable {
         // is a listener (i.e. a ZmqConsumerStateTable)
         unsafe {
             let fd = swss_try!(p_fd => SWSSZmqConsumerStateTable_getFd(self.ptr, p_fd))?;
-            let fd = BorrowedFd::borrow_raw(fd.try_into().unwrap());
+            let fd = BorrowedFd::borrow_raw(
+                fd.try_into()
+                    .expect("ZmqConsumerStateTable_getFd returned invalid fd"),
+            );
             Ok(fd)
         }
     }
